@@ -1,4 +1,4 @@
-package gdstructer
+package gdstructure
 
 import (
 	"fmt"

@@ -1,4 +1,4 @@
-package gdstructer
+package gdstructure
 
 const (
 	defaultSize = 64
