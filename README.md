@@ -8,5 +8,3 @@ $ go get github.com/zr-hebo/gdstructure
 
 # Usage
 
-# Author
-河伯
