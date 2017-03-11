@@ -18,7 +18,6 @@ $ go get github.com/zr-hebo/gdstructure
 	data := queue1.Dequeue()
 	intVal := data.(int)
 	fmt.Printf("%T %v\n", intVal, intVal)
-
 	
 	// string类型队列
 	queue2 := gds.NewQueue()
