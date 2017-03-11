@@ -9,7 +9,7 @@ $ go get github.com/zr-hebo/gdstructure
 
 	import (
 		gds "github.com/zr-hebo/gdstructure"
-			"fmt"
+		"fmt"
 	)
   
 	// Int类型队列
