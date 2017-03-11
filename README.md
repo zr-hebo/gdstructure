@@ -21,7 +21,7 @@ $ go get github.com/zr-hebo/gdstructure
 	
 	// string类型队列
 	queue2 := gds.NewQueue()
-	queue2.Enqueue("string")
+	queue2.Enqueue("haha")
 	
 	data = queue2.Dequeue()
 	strVal := data.(string)
