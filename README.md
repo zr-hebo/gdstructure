@@ -1,5 +1,6 @@
 # gdstructure
-gdstructure是一个golang实现的线程安全的FIFO队列
+gdstructure是一个golang实现的常用数据结构的包。
+其中Queue是一个基于动态数组实现的线程安全的FIFO队列
 # Install
 
 Use go get to install this package:<br>
