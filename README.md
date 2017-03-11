@@ -25,4 +25,4 @@ $ go get github.com/zr-hebo/gdstructure
 	
 	data := queue2.Dequeue()
 	strVal := data.(string)
-        fmt.Println(strVal)
+	fmt.Println(strVal)
