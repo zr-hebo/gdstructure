@@ -13,16 +13,16 @@ $ go get github.com/zr-hebo/gdstructure
 	)
   
 	// Int类型队列
-	queue1 = gds.NewQueue()
+	queue1 := gds.NewQueue()
 	queue1.Enqueue(1)
-	data := queue.Dequeue()
+	data := queue1.Dequeue()
 	intVal := data.(int)
 	fmt.Println(intVal)
 	
 	// string类型队列
-	queue2 = gds.NewQueue()
+	queue2 := gds.NewQueue()
 	queue2.Enqueue("string")
 	
-	data := queue2.Dequeue()
+	data = queue2.Dequeue()
 	strVal := data.(string)
 	fmt.Println(strVal)
