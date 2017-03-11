@@ -12,7 +12,8 @@ $ go get github.com/zr-hebo/gdstructure
 	)
   
 	// Int类型队列
-        queue1 = gds.NewQueue()
+        
+	queue1 = gds.NewQueue()
 	queue1.Enqueue(1)
 	data := queue.Dequeue()
 	intVal := data.(int)
