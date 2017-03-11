@@ -9,6 +9,7 @@ $ go get github.com/zr-hebo/gdstructure
 
 	import (
 		gds "github.com/zr-hebo/gdstructure"
+			"fmt"
 	)
   
 	// Int类型队列
@@ -16,6 +17,7 @@ $ go get github.com/zr-hebo/gdstructure
 	queue1.Enqueue(1)
 	data := queue.Dequeue()
 	intVal := data.(int)
+	fmt.Println(intVal)
 	
 	// string类型队列
 	queue2 = gds.NewQueue()
@@ -23,3 +25,4 @@ $ go get github.com/zr-hebo/gdstructure
 	
 	data := queue2.Dequeue()
 	strVal := data.(string)
+        fmt.Println(strVal)
