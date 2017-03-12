@@ -57,7 +57,6 @@ func (s *Stack) String() string {
 	s.locker.Lock()
 	defer s.locker.Unlock()
 
-	defaultSize := 1024
 	byteSlice := make([]byte, defaultSize)
 	buffer := bytes.NewBuffer(byteSlice)
 	stackLen := len(s.baseSlice)
