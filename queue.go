@@ -25,6 +25,9 @@ func NewQueue() (q *Queue) {
 
 // Size 同步队列元素个数
 func (q *Queue) Size() int {
+	q.locker.Lock()
+	defer q.locker.Unlock()
+
 	return len(q.queue)
 }
 
@@ -33,7 +36,8 @@ func (q *Queue) Enqueue(elem interface{}) {
 	q.locker.Lock()
 	defer q.locker.Unlock()
 
-	if q.startPos+q.Size()+1 <= cap(q.baseSlice) {
+	queueLen := len(q.queue)
+	if q.startPos+queueLen+1 <= cap(q.baseSlice) {
 		q.queue = append(q.queue, elem)
 
 	} else {
@@ -42,7 +46,7 @@ func (q *Queue) Enqueue(elem interface{}) {
 				[]interface{}, 0, recommendCap(cap(q.baseSlice)))
 		}
 
-		newQueue := q.baseSlice[:q.Size()]
+		newQueue := q.baseSlice[:queueLen]
 		copy(newQueue, q.queue)
 		q.startPos = 0
 		newQueue = append(newQueue, elem)
@@ -64,7 +68,8 @@ func (q *Queue) Dequeue() (elem interface{}) {
 	q.locker.Lock()
 	defer q.locker.Unlock()
 
-	if q.Size() < 1 {
+	queueLen := len(q.queue)
+	if queueLen < 1 {
 		return
 	}
 
@@ -82,10 +87,12 @@ func (q *Queue) String() string {
 
 	byteSlice := make([]byte, defaultSize)
 	buffer := bytes.NewBuffer(byteSlice)
-	buffer.WriteString(fmt.Sprintf("Queue size: %d, elements: ", q.Size()))
+	queueLen := len(q.queue)
+
+	buffer.WriteString(fmt.Sprintf("Queue size: %d, elements: ", queueLen))
 	for idx, elem := range q.queue {
 		buffer.WriteString(fmt.Sprintf("%v", elem))
-		if idx != q.Size()-1 {
+		if idx != queueLen-1 {
 			buffer.WriteString(", ")
 		}
 	}

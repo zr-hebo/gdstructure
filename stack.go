@@ -2,51 +2,72 @@ package gdstructure
 
 import (
 	"bytes"
+	"fmt"
 	"sync"
 )
 
-type bufferNode struct {
-	data *bytes.Buffer
-	next *bufferNode
+// Stack 线程安全堆栈
+type Stack struct {
+	baseSlice []interface{}
+	locker    *sync.Mutex
 }
 
-// BufferStack buffer队列，避免重复申请内存
-type BufferStack struct {
-	head   *bufferNode
-	locker *sync.Mutex
-	Size   int
+// NewStack 创建buffer堆栈
+func NewStack() (stack *Stack) {
+	stack = new(Stack)
+	stack.locker = new(sync.Mutex)
+	return
 }
 
-// NewBufferStack 创建buffer堆栈
-func NewBufferStack() (bq *BufferStack) {
-	head := new(bufferNode)
-	locker := new(sync.Mutex)
-	return &BufferStack{head, locker, 0}
+// Size 返回栈中元素个数
+func (s *Stack) Size() int {
+	s.locker.Lock()
+	defer s.locker.Unlock()
+	return len(s.baseSlice)
 }
 
-// Push 添加buffer到堆栈
-func (p *BufferStack) Push(b *bytes.Buffer) {
-	bn := new(bufferNode)
-	bn.data = b
+// Push 将元素添加到栈顶
+func (s *Stack) Push(elem interface{}) {
+	s.locker.Lock()
+	defer s.locker.Unlock()
 
-	p.locker.Lock()
-	bn.next = p.head.next
-	p.head.next = bn
-	// p.Size = p.Size + 1
-	p.Size++
-	p.locker.Unlock()
+	s.baseSlice = append(s.baseSlice, elem)
 }
 
-// Pop 从堆栈拿buffer
-func (p *BufferStack) Pop() (b *bytes.Buffer) {
-	p.locker.Lock()
-	if p.head.next != nil {
-		bn := p.head.next
-		p.head.next = bn.next
-		p.Size--
-		b = bn.data
+// Pop 从堆栈返回栈顶元素
+func (s *Stack) Pop() (elem interface{}) {
+	s.locker.Lock()
+	defer s.locker.Unlock()
+
+	stackSize := len(s.baseSlice)
+	if stackSize < 1 {
+		elem = nil
+		return
 	}
-	p.locker.Unlock()
+
+	elem = s.baseSlice[stackSize-1]
+	s.baseSlice = s.baseSlice[:stackSize-1]
 
 	return
+}
+
+// String 打印同步队列
+// 该方法回打印当前队列元素个数和所有元素
+func (s *Stack) String() string {
+	s.locker.Lock()
+	defer s.locker.Unlock()
+
+	defaultSize := 1024
+	byteSlice := make([]byte, defaultSize)
+	buffer := bytes.NewBuffer(byteSlice)
+	stackLen := len(s.baseSlice)
+
+	buffer.WriteString(fmt.Sprintf("Stack size: %d, elements: ", stackLen))
+	for idx, elem := range s.baseSlice {
+		buffer.WriteString(fmt.Sprintf("%v", elem))
+		if idx != stackLen-1 {
+			buffer.WriteString(", ")
+		}
+	}
+	return buffer.String()
 }
